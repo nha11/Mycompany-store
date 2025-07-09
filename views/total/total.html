@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Receipt</title>
+  <style>
+    .receipt {
+      border: 1px solid #999;
+      padding: 20px;
+      margin-top: 30px;
+      width: 300px;
+    }
+  </style>
+</head>
+<body>
+  <h2 class="tableid" id="tableid">Table</h2>
+  <div class="receipt" id="receipt">Loading...</div>
+  
+
+  <script>
+    const fileName = new URLSearchParams(window.location.search).get("from") || 'Unknown';
+
+  // Optionally show Khmer label
+  const label = fileName === 'input.html' ? 'វិក្កយបត្រសម្រាប់ table 1'
+               : fileName === 'input1.html' ? 'វិក្កយបត្រសម្រាប់ table 2'
+               : fileName === 'input2.html' ? 'វិក្កយបត្រសម្រាប់ table 3'
+               : 'វិក្កយបត្រ';
+  
+
+    const priceFood = 1000, priceDrink = 2500, priceAlcohol = 3500;
+    const r = JSON.parse(localStorage.getItem('receipt')) || {};
+
+    const html = `
+      <p>Food: ${r.food} × ${priceFood} = ${r.food * priceFood}</p>
+      <p>Drink: ${r.drink} × ${priceDrink} = ${r.drink * priceDrink}</p>
+      <p>Alcohol: ${r.alcohol} × ${priceAlcohol} = ${r.alcohol * priceAlcohol}</p>
+      <hr>
+      <strong>Total: ${r.food * priceFood + r.drink * priceDrink + r.alcohol * priceAlcohol}</strong>
+    `;
+    document.getElementById("tableid").textContent = label;
+    document.getElementById('receipt').innerHTML = html;
+  </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    justify-content: center;
+}
+
+.container {
+    margin: auto;
+    background: rgb(90, 80, 80);
+    padding: 20px;
+}
+
+h2 {
+    font-size: 50px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.foodbox{
+    display:grid;
+    background-color: aliceblue;
+    align-items: center;
+    padding: 20px;
+}
+label{
+    padding: 40px;
+    font-size: 30px;
+}
+
+#foodAmount{
+    width: 80px;
+    height: 40px;
+    padding-left: 7px;
+    margin-left: 37px;
+}
+#drinkAmount{
+    width: 80px;
+    height: 40px;
+    padding-left: 7px;
+    margin-left: 37px;
+}
+#alcoholAmount{
+    width: 80px;
+    height: 40px;
+    padding-left: 7px;
+    margin-left: 10px;
+}
+
+.buttonsc {
+    display: flex;
+    margin-top: 30px;
+}
+
+/* menu list */
+
+h3 {
+    font-size: 50px;
+    text-align: center;
+}
+
+table {
+    border: 3px solid black;
+    font-size: 35px;
+    text-align: center;
+}
+
+#submitBtn {
+    margin: 30px;
+    text-align: center;
+    font-size: 40px;
+    width: 180px;
+    height: 80px;
+}
+
+#cancelBtn {
+    margin: 30px;
+    text-align: center;
+    font-size: 40px;
+    width: 180px;
+    height: 80px;
+}
+
+th,
+td {
+    border: 1px solid;
+}
+
+#Totalbnt {
+    margin: 80px 60px;
+    font-size: 50px;
+    height: 70px;
+    width: 230px;
+}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Input Page</title>
+  <style>
+    table { border-collapse: collapse; margin-top: 20px; }
+    td, th { padding: 8px 12px; border: 1px solid #aaa; text-align: center; }
+    button { margin: 5px; }
+  </style>
+</head>
+<body>
+  <h2>Table: លេខ​ 3</h2>
+
+  <form id="dataForm" onsubmit="submitData(event)">
+    <input type="hidden" id="editIndex" value="-1">
+    <label>Food Amount: <input type="number" id="foodAmount" value="0" min="0" required></label><br>
+    <label>Drink Amount: <input type="number" id="drinkAmount" value="0" min="0" required></label><br>
+    <label>Alcohol Amount: <input type="number" id="alcoholAmount" value="0" min="0" required></label><br>
+
+    <button type="submit" id="submitBtn">Submit</button>
+    <button type="button" onclick="cancelEdit()" id="cancelBtn" style="display:none;">Cancel</button>
+  </form>
+
+  <h3>Saved Data</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Amounts</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Food</td><td id="foodList"></td></tr>
+      <tr><td>Drink</td><td id="drinkList"></td></tr>
+      <tr><td>Alcohol</td><td id="alcoholList"></td></tr>
+    </tbody>
+  </table>
+
+  <button onclick="goToTotal()">Total</button>
+
+  <script>
+    const storageKey = 'data_2<%= tableName2 %>';
+    const pricePerFood = 10, pricePerDrink = 5, pricePerAlcohol = 15;
+
+    function loadData() {
+      const data = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+      const foodList = [], drinkList = [], alcoholList = [];
+
+      data.forEach((item, index) => {
+        foodList.push(`${item.foodAmount} <button onclick="editRow(${index})">✏</button> <button onclick="deleteRow(${index})">🗑</button>`);
+        drinkList.push(item.drinkAmount);
+        alcoholList.push(item.alcoholAmount);
+      });
+
+      document.getElementById('foodList').innerHTML = foodList.join('<br>');
+      document.getElementById('drinkList').innerHTML = drinkList.join('<br>');
+      document.getElementById('alcoholList').innerHTML = alcoholList.join('<br>');
+    }
+
+    function submitData(e) {
+      e.preventDefault();
+      const foodAmount = +document.getElementById('foodAmount').value;
+      const drinkAmount = +document.getElementById('drinkAmount').value;
+      const alcoholAmount = +document.getElementById('alcoholAmount').value;
+
+      let data = JSON.parse(localStorage.getItem(storageKey)) || [];
+      const editIndex = +document.getElementById('editIndex').value;
+
+      if (editIndex >= 0) {
+        data[editIndex] = { foodAmount, drinkAmount, alcoholAmount };
+      } else {
+        data.push({ foodAmount, drinkAmount, alcoholAmount });
+      }
+
+      localStorage.setItem(storageKey, JSON.stringify(data));
+      cancelEdit();
+      loadData();
+    }
+
+    function editRow(index) {
+      const data = JSON.parse(localStorage.getItem(storageKey)) || [];
+      const item = data[index];
+      document.getElementById('foodAmount').value = item.foodAmount;
+      document.getElementById('drinkAmount').value = item.drinkAmount;
+      document.getElementById('alcoholAmount').value = item.alcoholAmount;
+      document.getElementById('editIndex').value = index;
+      document.getElementById('submitBtn').textContent = 'Save';
+      document.getElementById('cancelBtn').style.display = 'inline';
+    }
+
+    function deleteRow(index) {
+      let data = JSON.parse(localStorage.getItem(storageKey)) || [];
+      data.splice(index, 1);
+      localStorage.setItem(storageKey, JSON.stringify(data));
+      cancelEdit();
+      loadData();
+    }
+
+    function cancelEdit() {
+      document.getElementById('editIndex').value = -1;
+      document.getElementById('foodAmount').value = 0;
+      document.getElementById('drinkAmount').value = 0;
+      document.getElementById('alcoholAmount').value = 0;
+      document.getElementById('submitBtn').textContent = 'Submit';
+      document.getElementById('cancelBtn').style.display = 'none';
+    }
+
+    function goToTotal() {
+      const data = JSON.parse(localStorage.getItem(storageKey)) || [];
+      let totalFood = 0, totalDrink = 0, totalAlcohol = 0;
+
+      data.forEach(item => {
+        totalFood += item.foodAmount;
+        totalDrink += item.drinkAmount;
+        totalAlcohol += item.alcoholAmount;
+      });
+
+      const total = (totalFood * pricePerFood) + (totalDrink * pricePerDrink) + (totalAlcohol * pricePerAlcohol);
+
+      localStorage.setItem('receipt', JSON.stringify({ food: totalFood, drink: totalDrink, alcohol: totalAlcohol, total }));
+      window.location.href = 'total/total.html?from=input2.html';
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
